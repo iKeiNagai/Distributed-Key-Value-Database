@@ -52,4 +52,17 @@ app.get('/all', async (req, res) => {
     }
 });
 
+app.delete('/delete/:key', async (req, res) => {
+    try {
+        await db.del(req.params.key);
+        console.log(`Deleted: ${req.params.key}`);
+
+        await pubSocket.send(['delete', JSON.stringify({ key: req.params.key })]);
+
+        res.send('Key deleted and deletion replicated');
+    } catch (err) {
+        res.status(404).send('Key not found');
+    }
+});
+
 app.listen(3000, () => console.log('Leader node running on port 3000'));
