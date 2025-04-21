@@ -38,4 +38,18 @@ app.get('/get/:key', async (req, res) => {
     }
 });
 
+app.get('/all', async (req, res) => {
+    const allData = [];
+
+    try {
+        for await (const [key, value] of db.iterator()) {
+            allData.push({ key, value });
+        }
+        res.json(allData);
+    } catch (err) {
+        console.error('Failed to read all data:', err);
+        res.status(500).send('Error reading from database');
+    }
+});
+
 app.listen(3000, () => console.log('Leader node running on port 3000'));
