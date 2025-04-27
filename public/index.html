@@ -24,10 +24,17 @@
         <button type="submit">Set</button>
     </form>
 
+    <h2>Delete Key</h2>
+    <form id="delete-form">
+        <input type="text" id="delete-key" placeholder="Key" required>
+        <button type="submit">Delete</button>
+    </form>
+    <div id="delete-result"></div>
 
     <script>
         const apiUrl = 'http://172.174.208.25:3000';
         
+        //get all 
         document.getElementById('refresh-all').addEventListener('click', async () => {
             //fetch from api
             const response = await fetch(`${apiUrl}/all`);
@@ -43,6 +50,7 @@
             });
         });
 
+        //get using key
         document.getElementById('get-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const key = document.getElementById('get-key').value;
@@ -55,6 +63,7 @@
             }
         });
 
+        //put key/value
         document.getElementById('set-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const key = document.getElementById('set-key').value;
@@ -71,6 +80,21 @@
             alert(`Stored and duplicated in ${index}`);
 
         })
+
+        //delete key/value
+        document.getElementById('delete-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const key = document.getElementById('delete-key').value;
+            
+            try {
+                const response = await fetch(`${apiUrl}/delete/${key}`, { method: 'DELETE' });
+                const text = await response.text();
+                document.getElementById('delete-result').textContent = text;
+                
+            } catch (err) {
+                document.getElementById('delete-result').textContent = 'Key not found';
+            }
+        });
     </script>
 </body>
 </html>
