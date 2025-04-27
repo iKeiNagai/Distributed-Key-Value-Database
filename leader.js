@@ -13,8 +13,8 @@ app.use(express.static('public'));
 
 //zeromq follower sockets
 const followerAddresses = [
-    'tcp://20.124.82.78:5555',
-    'tcp://20.83.163.24:5555'
+    'tcp://{follower-ip-address}:5555',
+    'tcp://{follower-ip-address}:5555'
 ];
 
 //create push sockets (push/pull pattern)

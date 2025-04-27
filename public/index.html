@@ -32,7 +32,7 @@
     <div id="delete-result"></div>
 
     <script>
-        const apiUrl = 'http://172.174.208.25:3000';
+        const apiUrl = 'http://<master-ip-address>:3000';
         
         //get all 
         document.getElementById('refresh-all').addEventListener('click', async () => {
@@ -90,7 +90,7 @@
                 const response = await fetch(`${apiUrl}/delete/${key}`, { method: 'DELETE' });
                 const text = await response.text();
                 document.getElementById('delete-result').textContent = text;
-                
+
             } catch (err) {
                 document.getElementById('delete-result').textContent = 'Key not found';
             }
