@@ -56,7 +56,13 @@ app.post('/set', async (req, res) => {
 app.get('/get/:key', async (req, res) => {
     try {
         const value = await db.get(req.params.key);
-        res.send({ key: req.params.key, value });
+
+        //since lvldb didnt throw err
+        if (value === undefined) {
+            res.status(404).send('Key not found');
+        } else {
+            res.send({ key: req.params.key, value });
+        }
     } catch (err) {
         res.status(404).send('Key not found');
     }

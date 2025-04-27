@@ -10,9 +10,16 @@
     <button id="refresh-all">Refresh</button>
     <ul id="all-data"></ul>
 
+    <h2>Get Value by Key</h2>
+    <form id="get-form">
+        <input type="text" id="get-key" placeholder="Key" required>
+        <button type="submit">Get</button>
+    </form>
+    <div id="get-result"></div>
+
 
     <script>
-        const apiUrl = 'http://api-ip-address:3000';
+        const apiUrl = 'http://172.174.208.25:3000';
         
         document.getElementById('refresh-all').addEventListener('click', async () => {
             //fetch from api
@@ -27,6 +34,18 @@
                 li.textContent = `${item.key} = ${item.value}`;
                 list.appendChild(li);
             });
+        });
+
+        document.getElementById('get-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const key = document.getElementById('get-key').value;
+            try {
+                const response = await fetch(`${apiUrl}/get/${key}`);
+                const data = await response.json();
+                document.getElementById('get-result').textContent = `Value: ${data.value}`;
+            } catch (err) {
+                document.getElementById('get-result').textContent = 'Key not found';
+            }
         });
     </script>
 </body>
