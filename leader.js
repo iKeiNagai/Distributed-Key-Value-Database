@@ -9,6 +9,7 @@ const app = express();
 
 //middleware parse json requests
 app.use(express.json());
+app.use(express.static('public'));
 
 //zeromq follower sockets
 const followerAddresses = [

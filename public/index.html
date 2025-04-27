@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed KV Database</title>
+</head>
+<body>
+    <h2>All Key/Value Pairs</h2>
+    <button id="refresh-all">Refresh</button>
+    <ul id="all-data"></ul>
+
+
+    <script>
+        const apiUrl = 'http://api-ip-address:3000';
+        
+        document.getElementById('refresh-all').addEventListener('click', async () => {
+            //fetch from api
+            const response = await fetch(`${apiUrl}/all`);
+            const data = await response.json();
+
+            //create list using json response
+            const list = document.getElementById('all-data');
+            list.innerHTML = '';
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.key} = ${item.value}`;
+                list.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
