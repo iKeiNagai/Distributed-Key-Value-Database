@@ -13,8 +13,8 @@ app.use(express.static('public'));
 
 //zeromq follower sockets
 const followerAddresses = [
-    'tcp://{ip-address}:5555',
-    'tcp://{ip-address}:5555'
+    'tcp://20.124.82.78:5555',
+    'tcp://20.83.163.24:5555'
 ];
 
 //create push sockets (push/pull pattern)
@@ -87,17 +87,24 @@ app.get('/all', async (req, res) => {
 //delete key in db
 app.delete('/delete/:key', async (req, res) => {
     try {
-        await db.del(req.params.key);
-        console.log(`Deleted: ${req.params.key}`);
+        //checks for value
+        const value = await db.get(req.params.key);
 
-        //set follower
-        const index = getFollowerIndex(key);
-        const followerSocket = pushSockets[index];
+        if(value == undefined){
+            res.status(404).send('Key not found');
+        }else{
+            await db.del(req.params.key);
+            console.log(`Deleted: ${req.params.key}`);
 
-        //notifies follower
-        await followerSocket.send(JSON.stringify({action:'delete', key: req.params.key }));
+            //set follower
+            const index = getFollowerIndex(req.params.key);
+            const followerSocket = pushSockets[index];
 
-        res.send(`Deleted from leader and follower ${index}`);
+            //notifies follower
+            await followerSocket.send(JSON.stringify({action:'delete', key: req.params.key }));
+
+            res.send(`Deleted from leader and follower ${index}`);
+        }
     } catch (err) {
         res.status(404).send('Key not found');
     }
